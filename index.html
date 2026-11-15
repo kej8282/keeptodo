@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KeepToDo 테스터 모집</title>
+<meta name="description" content="인스타에 저장만 해두고 잊은 게시물을 할 일 옆에 붙여 드려요. KeepToDo MVP 테스터 모집 중 (무료).">
+<meta property="og:title" content="KeepToDo 테스터 모집">
+<meta property="og:description" content="저장만 해두고 잊은 인스타 게시물, 할 일 옆에 붙여 드릴게요.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M6 2h20v28l-10-7-10 7z' fill='%23161616'/%3E%3Cpath d='M10.5 12.5l4 4 7-8' fill='none' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600&display=swap">
+<style>
+/* Layout: one narrow column like the app itself — wordmark hero, a live-looking "today" card, then steps, notice and CTA */
+:root{
+  --paper:#f8f7f5; --card:#ffffff; --ink:#161616; --mute:#6b6a66; --line:#deddd9; --soft:#eeedea;
+  --mark:#b3261e; --mark-soft:#f6e7e5;
+  --serif:"Noto Serif KR","AppleMyungjo",serif;
+  --sans:"Noto Sans KR",-apple-system,"Apple SD Gothic Neo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#141413; --card:#1e1e1c; --ink:#f1efea; --mute:#a3a19b; --line:#33322f; --soft:#272624;
+  --mark:#ef6a60; --mark-soft:#3a201e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#141413; --card:#1e1e1c; --ink:#f1efea; --mute:#a3a19b; --line:#33322f; --soft:#272624;
+  --mark:#ef6a60; --mark-soft:#3a201e; color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));padding-block:40px 72px;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+.eyebrow{font-size:13px;letter-spacing:.08em;color:var(--mute);font-weight:500}
+.wordmark{font-weight:700;font-size:clamp(46px,13vw,68px);line-height:1;letter-spacing:-.045em}
+.wordmark span{font-family:var(--serif);font-weight:400;letter-spacing:-.03em}
+.hero{display:flex;flex-direction:column;gap:18px}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(24px,6.4vw,30px);line-height:1.4;letter-spacing:-.02em}
+.hero .lead{color:var(--mute)}
+.cta{display:flex;flex-direction:column;gap:10px}
+.btn{display:block;text-align:center;background:var(--ink);color:var(--paper);text-decoration:none;font-weight:700;border-radius:999px;padding:16px 20px;font-size:17px}
+.btn:focus-visible{outline:3px solid var(--mark);outline-offset:3px}
+.cta small{color:var(--mute);font-size:13px;text-align:center}
+/* phone card that mirrors the real Today screen */
+.today{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;display:grid;gap:14px;box-shadow:0 18px 40px -28px rgba(0,0,0,.35)}
+.today .date{font-family:var(--serif);font-size:22px}
+.task{border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:grid;gap:10px}
+.task .top{display:flex;align-items:center;gap:12px}
+.circle{width:22px;height:22px;border:2px solid var(--ink);border-radius:50%;flex:none}
+.task b{font-size:16px}
+.task .meta{color:var(--mute);font-size:13px}
+.pill{margin-left:auto;background:var(--soft);border-radius:999px;font-size:12px;padding:3px 10px;white-space:nowrap}
+.rec{border-top:1px solid var(--line);padding-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.rec span{font-weight:500;font-size:15px}
+.rec small{display:block;color:var(--mute);font-size:12px;font-weight:400}
+.rec i{font-style:normal;color:var(--mute)}
+.push{display:flex;gap:10px;align-items:center;background:var(--soft);border-radius:14px;padding:12px 14px;font-size:14px}
+.push svg{flex:none}
+.section{display:flex;flex-direction:column;gap:18px}
+.section h2{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:-.01em}
+.pain{display:grid;gap:10px}
+.pain p{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:18px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:36px minmax(0,1fr);gap:2px 14px;counter-increment:s}
+.steps li::before{content:counter(s);grid-row:span 2;width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:700;font-size:15px}
+.steps b{padding-top:3px}
+.steps p{color:var(--mute);font-size:15px}
+.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 18px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.facts dt{color:var(--mute);font-size:14px;white-space:nowrap}
+.facts dd{margin:0;font-size:15px}
+.note{background:var(--mark-soft);border-radius:16px;padding:18px;display:grid;gap:8px}
+.note b{color:var(--mark)}
+.note ul{margin:0;padding-left:18px;display:grid;gap:4px;font-size:15px}
+footer{color:var(--mute);font-size:13px;text-align:center}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">MVP 테스터 모집 · 무료</div>
+    <div class="wordmark" aria-label="KeepToDo">Keep<span>ToDo</span></div>
+    <h1>저장만 해두고 잊은 인스타 게시물,<br>할 일 옆에 붙여 드릴게요</h1>
+    <p class="lead">운동 루틴 릴스, 엑셀 꿀팁, 가 보고 싶은 카페. 저장은 했는데 정작 할 때는 못 찾았던 것들을, 그 일을 할 때 바로 꺼내 드려요.</p>
+    <div class="cta">
+      <a class="btn" href="https://keeptodo.fly.dev/#/signup" target="_blank" rel="noopener">테스터로 시작하기</a>
+      <small>이름과 숫자 4자리 코드만 있으면 가입돼요</small>
+    </div>
+  </header>
+
+  <section class="today" aria-label="KeepToDo 오늘 화면 예시">
+    <div class="push">
+      <svg width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 2h20v28l-10-7-10 7z" fill="currentColor"/><path d="M10.5 12.5l4 4 7-8" fill="none" style="stroke:var(--soft)" stroke-width="3"/></svg>
+      <span><b>KeepToDo</b> · 오늘은 하체 운동 하는 날이에요. 저장해두신 ‘무릎 편한 스쿼트 자세’ 보고 해보세요</span>
+    </div>
+    <div class="date">11월 17일 월요일</div>
+    <div class="task">
+      <div class="top"><span class="circle" aria-hidden="true"></span><div><b>하체 운동</b><div class="meta">루틴 · 오전 7시</div></div><span class="pill">추천 3개</span></div>
+      <div class="rec"><span>무릎 편한 스쿼트 자세<small>인스타그램</small></span><i aria-hidden="true">↗</i></div>
+      <div class="rec"><span>운동 전 하체 스트레칭<small>인스타그램</small></span><i aria-hidden="true">↗</i></div>
+    </div>
+    <div class="task">
+      <div class="top"><span class="circle" aria-hidden="true"></span><div><b>엑셀 과제 제출</b><div class="meta">마감 11월 18일</div></div><span class="pill">추천 2개</span></div>
+      <div class="rec"><span>피벗 테이블 3분 정리<small>인스타그램</small></span><i aria-hidden="true">↗</i></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>이런 분을 찾아요</h2>
+    <div class="pain">
+      <p>인스타 ‘저장됨’에 게시물이 쌓여만 있는 분</p>
+      <p>저장해 둔 걸 막상 할 때는 찾지 못했던 분</p>
+      <p>할 일·루틴(운동, 공부, 과제 등)이 꾸준히 있는 분</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>이렇게 써요</h2>
+    <ol class="steps">
+      <li><b>인스타 저장물 올리기</b><p>인스타에서 ‘저장됨’ 목록을 파일(zip)로 받아 올려요. 급하면 꼭 보고 싶은 게시물 스크린샷만 올려도 돼요.</p></li>
+      <li><b>할 일과 루틴 적기</b><p>마감일, 할 날짜, 반복 요일을 적어요. 설명을 자세히 쓸수록 더 잘 맞는 저장물을 찾아드려요.</p></li>
+      <li><b>할 때가 되면 알림으로</b><p>그 일을 할 즈음 알림이 오고, 할 일 옆에 맞는 저장물이 붙어 있어요. 끝낸 일은 체크하면 돼요.</p></li>
+    </ol>
+  </section>
+
+  <section class="section">
+    <h2>참여 안내</h2>
+    <dl class="facts">
+      <dt>비용</dt><dd>무료 (테스트 기간 동안)</dd>
+      <dt>가입</dt><dd>이름 + 직접 정하는 숫자 4자리 코드</dd>
+      <dt>받는 정보</dt><dd>올린 저장물, 할 일, 앱 이용 기록. 전화번호는 받지 않아요.</dd>
+      <dt>쓰는 곳</dt><dd>추천을 위해 팀원이 AI로 분석하고, 테스트가 끝나면 삭제해요.</dd>
+    </dl>
+    <div class="note">
+      <b>알림을 받으려면</b>
+      <ul>
+        <li>에브리타임·카톡 앱 안에서 열면 알림이 안 와요. <b>크롬이나 사파리</b>로 열어 주세요.</li>
+        <li>안드로이드: 크롬·삼성 인터넷에서 로그인 후 <b>알림 허용</b></li>
+        <li>아이폰: 사파리 <b>공유 → 홈 화면에 추가</b>한 아이콘으로 열어야 알림이 와요 (iOS 16.4 이상)</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="cta">
+    <a class="btn" href="https://keeptodo.fly.dev/#/signup" target="_blank" rel="noopener">테스터로 시작하기</a>
+    <small>keeptodo.fly.dev · 가입 후 화면 안내를 따라가면 돼요</small>
+  </div>
+
+  <footer>KeepToDo는 대학 수업 팀 프로젝트로 만든 서비스의 MVP 테스트예요.</footer>
+</div>
+
+</body>
+</html>
